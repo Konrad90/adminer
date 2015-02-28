@@ -39,6 +39,10 @@ if (!defined("DRIVER")) {
 			function quote($string) {
 				return "'" . $this->escape_string($string) . "'";
 			}
+			
+			function set_charset($charset) {
+	                	$this->query("SET NAMES $charset");
+	            	}
 		}
 
 	} elseif (extension_loaded("mysql") && !(ini_get("sql.safe_mode") && extension_loaded("pdo_mysql"))) {
@@ -293,7 +297,7 @@ if (!defined("DRIVER")) {
 		$credentials = $adminer->credentials();
 		if ($connection->connect($credentials[0], $credentials[1], $credentials[2])) {
 			$connection->set_charset(charset($connection)); // available in MySQLi since PHP 5.0.5
-			$connection->query("SET sql_quote_show_create = 1, autocommit = 1, character set utf8");
+			$connection->query("SET sql_quote_show_create = 1, autocommit = 1");
 			return $connection;
 		}
 		$return = $connection->error;
